@@ -82,6 +82,8 @@ class EngineController {
       const GoParams& params,
       std::chrono::steady_clock::time_point start_time);
 
+  V3TrainingData GetTrainingData();
+
  private:
   void UpdateFromUciOptions();
 
@@ -134,6 +136,7 @@ class EngineLoop : public UciLoop {
   void CmdGo(const GoParams& params) override;
   void CmdPonderHit() override;
   void CmdStop() override;
+  void CmdTrain(const std::string& version) override;
 
  private:
   OptionsParser options_;

@@ -411,6 +411,11 @@ void EngineController::Stop() {
   if (search_) search_->Stop();
 }
 
+V3TrainingData EngineController::GetTrainingData() {
+	CERR << tree_->GetCurrentHead()->DebugString();
+	return tree_->GetCurrentHead()->GetV3TrainingData(GameResult::UNDECIDED, tree_->GetPositionHistory(), FillEmptyHistory::NO);
+}
+
 EngineLoop::EngineLoop()
     : engine_(std::bind(&UciLoop::SendBestMove, this, std::placeholders::_1),
               std::bind(&UciLoop::SendInfo, this, std::placeholders::_1),
@@ -461,5 +466,21 @@ void EngineLoop::CmdGo(const GoParams& params) { engine_.Go(params); }
 void EngineLoop::CmdPonderHit() { engine_.PonderHit(); }
 
 void EngineLoop::CmdStop() { engine_.Stop(); }
+
+void EngineLoop::CmdTrain(const std::string& version) {
+	engine_.EnsureReady();
+	auto data = engine_.GetTrainingData();
+
+	// FIXME: can use base64
+	std::stringstream ss;
+	ss << "traindata ";
+	ss << std::hex << std::setfill('0');
+
+	auto buf = reinterpret_cast<const unsigned char*>(&data);
+	for(unsigned int i=0;i<sizeof(data);i++) {
+		ss << std::setw(2) << (unsigned int)buf[i];
+	}
+	SendResponse(ss.str());
+}
 
 }  // namespace lczero

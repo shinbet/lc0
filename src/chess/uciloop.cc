@@ -58,6 +58,7 @@ const std::unordered_map<std::string, std::unordered_set<std::string>>
         {{"ponderhit"}, {}},
         {{"quit"}, {}},
         {{"xyzzy"}, {}},
+		{{"traindata"}, {"version"}},
 };
 
 std::pair<std::string, std::unordered_map<std::string, std::string>>
@@ -201,6 +202,9 @@ bool UciLoop::DispatchCommand(
     SendResponse("Nothing happens.");
   } else if (command == "quit") {
     return false;
+  } else if (command == "traindata") {
+	  // FIXME: version
+	  CmdTrain("3");
   } else {
     throw Exception("Unknown command: " + command);
   }

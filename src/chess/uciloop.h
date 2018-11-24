@@ -82,6 +82,7 @@ class UciLoop {
   virtual void CmdStop() { throw Exception("Not supported"); }
   virtual void CmdPonderHit() { throw Exception("Not supported"); }
   virtual void CmdStart() { throw Exception("Not supported"); }
+  virtual void CmdTrain(const std::string& /*version*/) { throw Exception("Not supported"); }
 
  private:
   bool DispatchCommand(
